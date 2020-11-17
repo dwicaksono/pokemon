@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+
+import {
+  BrowserRouter as Router,
+  Route, Switch
+} from "react-router-dom"
+import styled from 'styled-components'
+import DetailPage from "./page/DetailPage"
+import Header from './components/Header'
+import Home from './page/Home'
+import PokemonList from './page/PokemonList'
+
+import {Provider} from 'react-redux'
+import {PersistGate} from 'redux-persist/integration/react'
+import {store,persistor} from './redux/store'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Container>
+      <Router>
+        <PersistGate persistor={persistor}>
+        <Header/>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/pokemon-list">
+            <PokemonList />
+          </Route>
+          <Route path="/pokemon-detail/:id">
+            <DetailPage />
+          </Route>
+        </Switch>
+        </PersistGate>
+      </Router>
+      </Container>
+    </Provider>
   );
 }
 
 export default App;
+
+const Container = styled.div`
+	display:flex;
+	justify-content:center;
+	align-items:center;
+  flex-direction:column;
+  `
